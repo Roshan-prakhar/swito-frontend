@@ -9,7 +9,7 @@ const Cart = () => {
   const { foodList, increaseQty, decreaseQty, quantities, removeFromCart } =
     useContext(StoreContext);
   //cart items
-  const cartItems = foodList.filter((food) => quantities[food.id] > 0);
+  const cartItems = foodList.filter((food) => quantities && quantities[food.id] > 0);
 
   //calcualtiong
   const { subtotal, shipping, tax, total } = calculateCartTotals(
@@ -54,7 +54,7 @@ const Cart = () => {
                           style={{ maxWidth: "100px" }}
                           type="text"
                           className="form-control  form-control-sm text-center quantity-input"
-                          value={quantities[food.id]}
+                          value={quantities ? quantities[food.id] : 0}
                           readOnly
                         />
                         <button
@@ -68,7 +68,7 @@ const Cart = () => {
                     </div>
                     <div className="col-md-2 text-end">
                       <p className="fw-bold">
-                        &#8377;{(food.price * quantities[food.id]).toFixed(2)}
+                        &#8377;{quantities ? (food.price * quantities[food.id]).toFixed(2) : '0.00'}
                       </p>
                       <button
                         className="btn btn-sm btn-outline-danger"

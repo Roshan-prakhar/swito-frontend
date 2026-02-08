@@ -8,9 +8,9 @@ const Menubar = () => {
   const [active, setActive] = useState("home");
   const { quantities, token, setToken, setQuantities } =
     useContext(StoreContext);
-  const uniqueItemsInCart = Object.values(quantities).filter(
+  const uniqueItemsInCart = quantities ? Object.values(quantities).filter(
     (qty) => qty > 0
-  ).length;
+  ).length : 0;
   const navigate = useNavigate();
 
   const logout = () => {

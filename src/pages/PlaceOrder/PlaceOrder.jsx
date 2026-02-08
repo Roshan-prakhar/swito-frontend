@@ -43,8 +43,8 @@ const PlaceOrder = () => {
       email: data.email,
       orderedItems: cartItems.map((item) => ({
         foodId: item.foodId,
-        quantity: quantities[item.id],
-        price: item.price * quantities[item.id],
+        quantity: quantities ? quantities[item.id] : 0,
+        price: quantities ? item.price * quantities[item.id] : 0,
         category: item.category,
         imageUrl: item.imageUrl,
         description: item.description,
@@ -128,7 +128,7 @@ const PlaceOrder = () => {
   };
 
   //cart items
-  const cartItems = foodList.filter((food) => quantities[food.id] > 0);
+  const cartItems = foodList.filter((food) => quantities && quantities[food.id] > 0);
 
   //calcualtiong
   const { subtotal, shipping, tax, total } = calculateCartTotals(
@@ -164,11 +164,11 @@ const PlaceOrder = () => {
                   <div>
                     <h6 className="my-0">{item.name}</h6>
                     <small className="text-body-secondary">
-                      Qty: {quantities[item.id]}
+                      Qty: {quantities ? quantities[item.id] : 0}
                     </small>
                   </div>
                   <span className="text-body-secondary">
-                    &#8377;{item.price * quantities[item.id]}
+                    &#8377;{quantities ? (item.price * quantities[item.id]).toFixed(2) : '0.00'}
                   </span>
                 </li>
               ))}

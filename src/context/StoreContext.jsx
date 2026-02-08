@@ -36,8 +36,16 @@ export const StoreContextProvider = (props) => {
   };
 
   const loadCartData = async (token) => {
-    const items = await getCartData(token);
-    setQuantities(items);
+    console.log("StoreContext - Loading cart data with token:", token ? token.substring(0, 20) + "..." : "null");
+    try {
+      const items = await getCartData(token);
+      console.log("StoreContext - Cart data loaded successfully:", items);
+      setQuantities(items);
+    } catch (error) {
+      console.error("StoreContext - Error loading cart data:", error);
+      // Set empty cart on error to prevent crashes
+      setQuantities({});
+    }
   };
 
   const contextValue = {
@@ -54,11 +62,23 @@ export const StoreContextProvider = (props) => {
 
   useEffect(() => {
     async function loadData() {
-      const data = await fetchFoodList();
-      setFoodList(data);
-      if (localStorage.getItem("token")) {
-        setToken(localStorage.getItem("token"));
-        await loadCartData(localStorage.getItem("token"));
+      console.log("StoreContext - Starting data load...");
+      try {
+        const data = await fetchFoodList();
+        console.log("StoreContext - Food list loaded:", data.length, "items");
+        setFoodList(data);
+        
+        const storedToken = localStorage.getItem("token");
+        console.log("StoreContext - Token from localStorage:", storedToken ? storedToken.substring(0, 20) + "..." : "null");
+        
+        if (storedToken) {
+          setToken(storedToken);
+          await loadCartData(storedToken);
+        } else {
+          console.log("StoreContext - No token found, skipping cart load");
+        }
+      } catch (error) {
+        console.error("StoreContext - Error in loadData:", error);
       }
     }
     loadData();

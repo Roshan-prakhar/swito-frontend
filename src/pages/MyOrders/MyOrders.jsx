@@ -4,16 +4,15 @@ import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 import { assets } from "../../assets/assets";
 import "./MyOrders.css";
+import { fetchUserOrders } from "../../service/orderService";
 
 const MyOrders = () => {
   const { token } = useContext(StoreContext);
   const [data, setData] = useState([]);
 
   const fetchOrders = async () => {
-    const response = await axios.get("http://localhost:8080/api/orders", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setData(response.data);
+    const response = await fetchUserOrders(token);
+    setData(response);
   };
 
   useEffect(() => {

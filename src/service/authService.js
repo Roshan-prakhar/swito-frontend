@@ -1,11 +1,10 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:8080/api";
+import { AUTH_API_URL } from "../config/api";
 
 export const registerUser = async (data) => {
     try {
         const response = await axios.post(
-            API_URL+"/register",
+            AUTH_API_URL+"/register",
             data
           );
         return response
@@ -16,7 +15,7 @@ export const registerUser = async (data) => {
 
 export const login = async (data) => {
     try {
-        const response = await axios.post(API_URL+"/login", data);
+        const response = await axios.post(AUTH_API_URL+"/login", data);
         return response;
     } catch (error) {
         throw error;

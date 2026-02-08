@@ -1,11 +1,10 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:8080/api/cart";
+import { CART_API_URL } from "../config/api";
 
 export const addToCart = async (foodId, token) => {
     try {
         await axios.post(
-            API_URL,
+            CART_API_URL,
             { foodId },
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -17,7 +16,7 @@ export const addToCart = async (foodId, token) => {
 export const removeQtyFromCart = async (foodId, token) => {
     try {
         await axios.post(
-            API_URL+"/remove",
+            CART_API_URL+"/remove",
             { foodId },
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -28,7 +27,7 @@ export const removeQtyFromCart = async (foodId, token) => {
 
 export const getCartData = async (token) => {
     try {
-        const response = await axios.get(API_URL, {
+        const response = await axios.get(CART_API_URL, {
             headers: { Authorization: `Bearer ${token}` },
           });
           return response.data.items;
@@ -36,3 +35,16 @@ export const getCartData = async (token) => {
         console.error('Error while fetching the cart data', error);
     }
 }
+
+export const clearCartItems = async (token, setQuantities) => {
+    try {
+        await axios.delete(CART_API_URL, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        setQuantities({});
+    } catch (error) {
+        console.error('Error while clearing the cart', error);
+        throw error;
+    }
+}
+
